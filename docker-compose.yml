@@ -1,40 +1,53 @@
-version: "3.9"
 services:
   charcount:
     build:
       context: ./editor-charcount
     container_name: charcount-service
     ports:
-      - "4001:4001"
+      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4001"]
+      test: ["CMD", "curl", "-f", "http://localhost:${CHARCOUNT_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${CHARCOUNT_PORT}
+    networks:
+      - editor-network
 
   wordcount:
     build:
       context: ./editor-wordcount
     container_name: wordcount-service
     ports:
-      - "4002:4002"
+      - "${WORDCOUNT_PORT}:${WORDCOUNT_PORT}"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4002"]
+      test: ["CMD", "curl", "-f", "http://localhost:${WORDCOUNT_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
+    environment:
+      - PORT=${WORDCOUNT_PORT}
+    networks:
+      - editor-network
 
   frontend:
     build:
       context: ./editor-frontend
     container_name: frontend-service
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
       - charcount
       - wordcount
     environment:
-      - CHARCOUNT_URL=http://charcount-service:4001
-      - WORDCOUNT_URL=http://wordcount-service:4002
+      - CHARCOUNT_URL=http://charcount-service:${CHARCOUNT_PORT}
+      - WORDCOUNT_URL=http://wordcount-service:${WORDCOUNT_PORT}
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - editor-network
+
+networks:
+  editor-network:
+    driver: bridge
