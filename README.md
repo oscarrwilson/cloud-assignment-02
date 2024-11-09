@@ -1,149 +1,91 @@
+# QUB Editor Project
 
-Cloud Assignment: QUB Editor Project
+A cloud-based text editor demonstrating concepts in cloud computing, including containerisation, microservices, and CI/CD pipelines. The editor supports text-based operations through backend services, with a frontend interface for user interaction.
 
-This project is the QUB Editor, a cloud-based text editor designed to demonstrate 
-concepts in cloud computing, including containerisation, microservices, and CI/CD 
-pipelines. The editor supports text-based operations through backend services, with 
-a frontend interface for user interaction.
+## Getting Started
 
-================================================================================
-                              Table of Contents
-================================================================================
+These instructions will help you set up the project on your local machine for development and testing purposes.
 
-- Project Structure
-- Features
-- Prerequisites
-- Setup Instructions
-- Usage
-- Testing
-- Improvements (Task B)
-- Author
-- License
-- Additional Resources
+### Prerequisites
 
-================================================================================
-                              Project Structure
-================================================================================
+Ensure you have the following installed:
 
-The project consists of the following components:
+- Docker
+- Basic knowledge of Git and GitHub Flow
 
-1. editor-frontend: A static HTML/JavaScript frontend for user interaction.
-2. editor-wordcount: A PHP-based backend service that calculates the word count 
-   of a given text.
-3. editor-charcount: A Node.js-based backend service that calculates the 
-   character count of a given text.
-
-Directory Overview:
--------------------
-root/
-├── README.md            # Main project documentation (this file)
-├── editor-charcount/    # Character count service
-├── editor-frontend/     # Frontend interface
-├── editor-wordcount/    # Word count service
-
-================================================================================
-                                 Features
-================================================================================
-
-1. Word Count Service:
-   - Counts the number of words in a given text.
-   - Implemented in PHP.
-
-2. Character Count Service:
-   - Counts the number of characters in a given text.
-   - Implemented in Node.js.
-
-3. Frontend:
-   - Provides a user interface for submitting text to the backend services.
-   - Implemented in static HTML and JavaScript.
-
-================================================================================
-                               Prerequisites
-================================================================================
-
-- Docker installed and running.
-- Basic knowledge of Git and GitHub Flow.
-
-================================================================================
-                            Setup Instructions
-================================================================================
+### Installing
 
 1. Clone the Repository:
-   git clone <repository_url>
+   ```bash
+   git clone https://github.com/oscarrwilson/cloud-assignment-02.git
    cd cloud-assignment-02
+   ```
 
 2. Build Docker Containers:
    Navigate to each subdirectory and build the Docker images:
+   ```bash
    cd editor-charcount
    docker build -t editor-charcount .
-   
+
    cd ../editor-wordcount
    docker build -t editor-wordcount .
-   
+
    cd ../editor-frontend
    docker build -t editor-frontend .
+   ```
 
 3. Run Docker Containers:
    Run the containers using the following commands:
-   docker run -p 3000:3000 editor-charcount
-   docker run -p 4000:4000 editor-wordcount
-   docker run -p 5000:5000 editor-frontend
+   ```bash
+   docker run -d -p 8080:80 editor-frontend
+   docker run -d -p 3000:3000 editor-charcount
+   docker run -d -p 8000:80 editor-wordcount
+
+   ```
 
 4. Access the Application:
-   - Frontend: http://localhost:5000
-   - Word Count API: http://localhost:4000
+   - Frontend: http://localhost:8080
+   - Word Count API: http://localhost:8000
    - Character Count API: http://localhost:3000
 
-================================================================================
-                                 Usage
-================================================================================
+## Running the Tests
 
-1. Open the frontend in your browser.
-2. Enter text in the input box and click the corresponding button to:
-   - Count words.
-   - Count characters.
-3. Results will be displayed in the frontend interface.
+### Backend Unit Tests
 
-================================================================================
-                                Testing
-================================================================================
+Each backend service includes unit tests. Run them as follows:
 
-Each backend service includes unit tests. Run the tests as follows:
-
-- editor-charcount:
+- **editor-charcount**:
+  ```bash
   cd editor-charcount/test
   node test-charcount.js
+  ```
 
-- editor-wordcount:
+- **editor-wordcount**:
+  ```bash
   cd editor-wordcount/src
   php test.php
+  ```
 
-================================================================================
-                           Improvements (Task B)
-================================================================================
+## Deployment
 
-The following improvements are being implemented:
-- Improved error handling for frontend and backend.
-- Dynamic route configuration for backend services.
-- Enhanced CI testing with end-to-end tests.
+The application can be deployed on any system with Docker installed. Follow the setup instructions to build and run the Docker containers on your deployment server.
 
-================================================================================
-                                 Author
-================================================================================
+## Built With
 
-Oscar Wilson - University of Bristol, CSC3065 Cloud Computing Assignment.
+- [Docker](https://docs.docker.com/) - Containerisation platform
+- [Node.js](https://nodejs.org/) - Backend runtime for `editor-charcount`
+- [PHP](https://www.php.net/) - Backend runtime for `editor-wordcount`
 
-================================================================================
-                                License
-================================================================================
+## Authors
 
-This project is for educational purposes as part of CSC3065 at QUB and is not 
-intended for production use.
+- **Oscar Wilson** - Queens University Belfast, CSC3065 Cloud Computing Assignment
 
-================================================================================
-                           Additional Resources
-================================================================================
+## License
 
-- Docker Documentation: https://docs.docker.com
-- Node.js Documentation: https://nodejs.org
-- PHP Documentation: https://www.php.net
+This project is for educational purposes as part of CSC3065 at QUB and is not intended for production use.
+
+## Acknowledgments
+
+- **QUB** for the assignment outline.
+- **Docker, Node.js, PHP** communities for their excellent documentation and resources.
+- **ChatGPT** for use of assignment research and article sourcing.
