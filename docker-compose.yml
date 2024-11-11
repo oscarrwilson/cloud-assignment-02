@@ -1,53 +1,39 @@
 services:
+  frontend:
+    build:
+      context: ./editor-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+
   charcount:
     build:
       context: ./editor-charcount
-    container_name: charcount-service
+      dockerfile: Dockerfile
     ports:
-      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
+      - "4001:80"
+    depends_on:
+      - wordcount
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${CHARCOUNT_PORT}"]
+      test: curl -f http://localhost:4001 || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${CHARCOUNT_PORT}
-    networks:
-      - editor-network
 
   wordcount:
     build:
       context: ./editor-wordcount
-    container_name: wordcount-service
+      dockerfile: Dockerfile
     ports:
-      - "${WORDCOUNT_PORT}:${WORDCOUNT_PORT}"
+      - "4002:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${WORDCOUNT_PORT}"]
+      test: curl -f http://localhost:4002 || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      - PORT=${WORDCOUNT_PORT}
-    networks:
-      - editor-network
-
-  frontend:
-    build:
-      context: ./editor-frontend
-    container_name: frontend-service
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    depends_on:
-      - charcount
-      - wordcount
-    environment:
-      - CHARCOUNT_URL=http://charcount-service:${CHARCOUNT_PORT}
-      - WORDCOUNT_URL=http://wordcount-service:${WORDCOUNT_PORT}
-      - NODE_ENV=${NODE_ENV}
-    networks:
-      - editor-network
 
 networks:
-  editor-network:
+  default:
     driver: bridge
