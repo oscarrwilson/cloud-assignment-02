@@ -1,20 +1,21 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-type: application/json");
-require('functions.inc.php');
+require('functions.php'); // Correct file name
 
 $output = array(
-	"error" => false,
-	"string" => "",
-	"answer" => 0
+    "error" => false,
+    "string" => "",
+    "answer" => 0
 );
 
 $t = $_REQUEST['text'];
 
-$answer=wordcount($t);
+$answer = wordcount($t);
 
-$output['string']="Contains ".$answer." words";
-$output['answer']=$answer;
+$output['string'] = "Contains " . $answer . " words";
+$output['answer'] = $answer;
 
 echo json_encode($output);
 exit();
+?>
