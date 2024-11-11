@@ -1,27 +1,20 @@
-# Stage 1: Build dependencies
-FROM node:16-alpine AS builder
-
-# Set the working directory
-WORKDIR /usr/src/app
-
-# Copy package files and install production dependencies
-COPY package*.json ./
-RUN npm install --production
-
-# Copy the application source code
-COPY ./src ./src
-
-# Stage 2: Run the application
+# Use a lightweight Node.js image
 FROM node:16-alpine
 
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy dependencies and source code from the builder stage
-COPY --from=builder /usr/src/app /usr/src/app
+# Copy application source code
+COPY ./src ./src
 
-# Expose the frontend port
+# Move `config.json` and `index.html` to the root for easier access
+RUN cp ./src/config.json ./config.json && cp ./src/index.html ./index.html
+
+# Install a static file server for serving frontend
+RUN npm install -g http-server
+
+# Expose the application port
 EXPOSE 4000
 
-# Start the application dynamically
-CMD ["sh", "-c", "npm start -- -l ${FRONTEND_PORT}"]
+# Serve static files using http-server
+CMD ["http-server", ".", "-p", "4000"]

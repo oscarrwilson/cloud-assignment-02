@@ -1,27 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUBeditotron3000</title>
-    <link rel="stylesheet" href="css/styles.css">
+<title>QUBeditotron3000</title>
+
+<script type="text/javascript">
+
+let wordcountURL = "http://wordcount.editor.qpc.qubcloud.uk";
+let charcountURL = "http://charcount.editor.qpc.qubcloud.uk";
+
+
+
+function Wordcount()
+{
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var j = JSON.parse(this.response);
+            document.getElementById('output').value = j.answer;
+        }
+    };
+
+    let url = wordcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
+    xhttp.open("GET",url);
+    xhttp.send();
+}
+
+function Charcount()
+{
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var j = JSON.parse(this.response);
+            document.getElementById('output').value = j.answer;
+        }
+    };
+
+    let url = charcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
+    xhttp.open("GET",url);
+    xhttp.send();
+}
+
+
+</script>
+
+<style type="text/css">
+body  {
+    font-size: 150%;
+    font-family: monospace;
+}
+
+#logo
+{
+    font-family: Calibri, sans-serif;
+    font-weight: lighter;
+    color: #505050;
+    margin: 0.5em;
+}
+
+#editor
+{
+    text-align: center;
+    margin-top: 1em;
+}
+
+#output {
+    font-size: 100%;
+    padding: 0.2em;
+    margin: 0.2em;
+    font-family: monospace;
+    letter-spacing: 0.1em;
+}
+
+#content {
+    font-size: 100%;
+    padding: 0.2em;
+    margin: 0.2em;
+    font-family: monospace;
+    letter-spacing: 0.1em;
+}
+
+.operation {
+    border: solid #d0d0d0 1px;
+    background-color: #f0f0f0;
+    padding: 1.5em;
+    margin: 1em;
+    width: 14em;
+}
+</style>
+
 </head>
 <body>
-    <div id="editor">
-        <div id="logo">
-            QUBeditotron3000
-        </div>
-        <div>
-            <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
-        </div>
-        <div>
-            <input type="text" id="output" readonly placeholder="Result will appear here..." />
-        </div>
-        <div>
-            <button class="operation" onclick="performOperation('wordcount');">Word Count</button>
-            <button class="operation" onclick="performOperation('charcount');">Character Count</button>
-        </div>
+<div id="editor">
+    <div id="logo">
+        QUBeditotron3000
     </div>
-    <script src="js/app.js"></script>
+    <div>
+        <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
+    </div>
+    <div>
+        <input type="text" id="output" readonly="1" value="" />
+    </div>
+    <div>
+        <button class="operation" onclick="Wordcount();">Word Count</button>
+        <button class="operation" onclick="Charcount();">Character Count</button>
+    </div>
+    <div>
+        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="">??</button>
+    </div>
+    <div>
+        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="">??</button>
+    </div>
+    <div>
+        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="">??</button>
+    </div>
+    <div>
+        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="">??</button>
+    </div>
+    
+</div>
 </body>
+
+
 </html>
