@@ -7,8 +7,8 @@ services:
       - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${CHARCOUNT_PORT}"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
     environment:
       - NODE_ENV=${NODE_ENV}
@@ -24,8 +24,8 @@ services:
       - "${WORDCOUNT_PORT}:${WORDCOUNT_PORT}"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${WORDCOUNT_PORT}"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
     environment:
       - PORT=${WORDCOUNT_PORT}
