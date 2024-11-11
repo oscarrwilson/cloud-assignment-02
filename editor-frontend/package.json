@@ -2,12 +2,12 @@
   "name": "editor-frontend",
   "version": "1.0.0",
   "description": "Frontend container for editor service, runs on port 80.",
-  "main": "index.js",
+  "main": "src/app.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
