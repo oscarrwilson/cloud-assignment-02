@@ -5,6 +5,8 @@ cloud-assignment-02/
 ├── .gitignore                # Prevents committing unnecessary files
 ├── README.md                 # Project documentation
 ├── docker-compose.yml        # Orchestration for services
+├── docs/          # Frontend service
+│   ├── architecture.md
 ├── editor-frontend/          # Frontend service
 │   ├── Dockerfile
 │   ├── README.md

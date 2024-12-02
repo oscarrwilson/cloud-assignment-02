@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:7.2-apache
 
 # Install necessary PHP extensions
 RUN docker-php-ext-install mysqli && \
@@ -17,7 +17,7 @@ RUN echo '<Directory "/var/www/html">\n\
 </Directory>' > /etc/apache2/sites-available/000-default.conf
 
 # Set DirectoryIndex to server.php
-RUN echo "DirectoryIndex server.php" >> /etc/apache2/apache2.conf
+RUN echo "DirectoryIndex index.php" >> /etc/apache2/apache2.conf
 
 # Copy application files to /var/www/html
 COPY ./src/ /var/www/html/
