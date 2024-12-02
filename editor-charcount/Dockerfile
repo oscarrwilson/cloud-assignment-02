@@ -1,27 +1,22 @@
-# Stage 1: Build dependencies
-FROM node:16-alpine AS builder
+# Use a specific Node.js LTS version
+FROM node:14.18
 
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install production dependencies
-COPY package.json package-lock.json ./
-RUN npm install --production
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install --production && npm cache clean --force
 
-# Copy the application source code
-COPY src/ ./src
-
-# Stage 2: Run the application
-FROM node:16-alpine
-
-# Set the working directory
-WORKDIR /usr/src/app
-
-# Copy built dependencies and source code from the builder stage
-COPY --from=builder /usr/src/app /usr/src/app
+# Copy application source code
+COPY . .
 
 # Expose the service port
 EXPOSE 4001
+
+# Run the application as a non-root user
+RUN useradd -m appuser
+USER appuser
 
 # Start the application with dynamic port support
 CMD ["sh", "-c", "node src/server.js --port=${PORT}"]

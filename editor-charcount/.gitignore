@@ -1,2 +1,21 @@
+# Node modules directory
 node_modules
+
+# npm lock file
 package-lock.json
+
+# Logs
+logs
+*.log
+
+# Environment variables file
+.env
+
+# Coverage directory
+coverage
+
+# VS Code settings
+.vscode/
+
+# MacOS files
+.DS_Store
