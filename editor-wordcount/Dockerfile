@@ -17,7 +17,7 @@ RUN echo '<Directory "/var/www/html">\n\
 </Directory>' > /etc/apache2/sites-available/000-default.conf
 
 # Set DirectoryIndex to server.php
-RUN echo "DirectoryIndex index.php" >> /etc/apache2/apache2.conf
+RUN echo "DirectoryIndex WordCountServer.php" >> /etc/apache2/apache2.conf
 
 # Copy application files to /var/www/html
 COPY ./src/ /var/www/html/
