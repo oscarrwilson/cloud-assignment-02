@@ -1,21 +1,39 @@
 # Node modules directory
-node_modules
+node_modules/       # Installed Node.js dependencies
 
 # npm lock file
-package-lock.json
+package-lock.json   # Dependency lock file for npm
 
 # Logs
-logs
-*.log
+logs/               # Log directory
+*.log               # Log files
 
-# Environment variables file
-.env
+# Temporary files
+*.tmp               # Temporary files
+*.cache             # Cache files
 
-# Coverage directory
-coverage
+# Environment variables
+.env                # Environment configuration file
 
-# VS Code settings
-.vscode/
+# Test and coverage files
+coverage/           # Code coverage reports
+*.spec.js           # Test files
+*.test.js           # Test files
 
-# MacOS files
-.DS_Store
+# Editor settings
+.vscode/            # Visual Studio Code settings
+.idea/              # JetBrains IDE settings
+
+# macOS system files
+.DS_Store           # Finder metadata file for macOS
+
+# Build directories
+dist/               # Distribution files
+build/              # Build directories
+
+# Debugging tools
+*.log.*             # Rotated log files (e.g., `.log.1`, `.log.2`)
+
+# Yarn-specific files (if applicable)
+.yarn-integrity     # Yarn integrity file
+.pnp.*              # Plug'n'Play files from Yarn 2+
