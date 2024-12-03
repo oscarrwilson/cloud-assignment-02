@@ -6,15 +6,17 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "express": "^4.16.1"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "chai": "^5.1.2",
     "mocha": "^11.0.1",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "eslint": "8.46.0"
   },
   "contributors": [
     {

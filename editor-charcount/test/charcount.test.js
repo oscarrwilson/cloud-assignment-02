@@ -57,3 +57,4 @@ describe('charcount.counter', () => {
     expect(result).to.equal(1500);
   });
 });
+

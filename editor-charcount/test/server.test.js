@@ -95,4 +95,27 @@ describe('Server Integration Tests', () => {
 
     expect(response.headers['access-control-allow-origin']).to.equal('*');
   });
+
+  it('should handle requests sequentially without delay between them', async () => {
+    const requestCount = 5; // Number of sequential requests
+    const text = 'sequential test';
+    const expectedLength = text.length;
+
+    let responses = [];
+
+    // Sequentially process each request, one after the other
+    for (let i = 0; i < requestCount; i++) {
+      const response = await request(app)
+        .get('/')
+        .query({ text: text });
+
+      responses.push(response);
+    }
+
+    // Check the responses after all have completed
+    responses.forEach(response => {
+      expect(response.status).to.equal(200);
+      expect(response.body.answer).to.equal(expectedLength); // "sequential test" is 16 characters
+    });
+  });
 });
