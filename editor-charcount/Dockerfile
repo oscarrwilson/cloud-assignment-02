@@ -1,22 +1,22 @@
 # Use a specific Node.js LTS version
-FROM node:14.18
+FROM node:18-alpine AS base
 
 # Set the working directory
 WORKDIR /usr/src/app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install --production && npm cache clean --force
+RUN npm ci --production
 
 # Copy application source code
 COPY . .
 
-# Expose the service port
+# Expose the service port for documentation
 EXPOSE 4001
 
-# Run the application as a non-root user
-RUN useradd -m appuser
+# Create a non-root user and switch to it
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 # Start the application with dynamic port support
-CMD ["sh", "-c", "node src/server.js --port=${PORT}"]
+CMD ["sh", "-c", "node src/server.js --port=${PORT:-4001}"]
