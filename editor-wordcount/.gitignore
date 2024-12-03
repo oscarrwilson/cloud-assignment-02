@@ -1,0 +1,36 @@
+# PHP dependencies directory
+vendor/             # Composer dependencies
+
+# Composer lock file
+composer.lock       # Lock file for dependency versions
+
+# Logs and debug files
+logs/               # Application logs
+*.log               # Log files
+*.cache             # Cache files
+*.tmp               # Temporary files
+
+# Environment variables
+.env                # Local environment configuration
+
+# Test and coverage files
+coverage/           # Code coverage reports
+tests/              # Test directories
+
+# IDE and editor settings
+.vscode/            # Visual Studio Code settings
+.idea/              # JetBrains IDE settings (e.g., PhpStorm)
+
+# macOS system files
+.DS_Store           # macOS Finder metadata
+
+# Build and artifact directories
+build/              # Build directories
+dist/               # Distribution directories
+
+# Debugging tools
+phpunit.xml         # PHPUnit configuration file (if environment-specific)
+phpunit.xml.dist    # Default PHPUnit configuration
+
+# Temporary files
+*.swp               # Vim swap files
