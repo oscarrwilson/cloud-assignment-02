@@ -38,10 +38,10 @@ cloud-assignment-02/
     │       └── ci.yml    # CI pipeline configuration
     ├── src/
     │   ├── WordCount.php # Word counting logic
-    │   └── WordCountServer.php     # PHP server endpoint
+    │   └── index.php     # PHP server endpoint
     ├── tests/            # Consistent with Node.js service
-    │   ├── unit/        # Separate unit tests
-    │   └── integration/ # Separate integration tests
+    │   ├── WordCountTest        # Separate unit tests
+    │   └── indexTest # Separate integration tests
     ├── .dockerignore    # Docker ignore rules
     ├── .env            # Service environment variables
     ├── .gitignore     # Git ignore rules
