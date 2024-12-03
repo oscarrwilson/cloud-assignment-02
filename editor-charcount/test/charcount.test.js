@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const charcount = require('../src/charcount');
+import { expect } from 'chai';
+import charcount from '../src/charcount.js'; // Use `.js` extension for ESM
 
 describe('charcount.counter', () => {
   it('should return the correct character count for a valid string', () => {

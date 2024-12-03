@@ -2,22 +2,30 @@
   "name": "editor_charcount",
   "version": "1.0.0",
   "description": "Character Counting Web Service",
-  "author": "David Cutting <d.cutting@qub.ac.uk>",
-  "main": "server.js",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/server.js",
     "test": "mocha"
   },
   "dependencies": {
     "express": "^4.16.1"
   },
   "devDependencies": {
-    "chai": "^4.5.0",
-    "mocha": "^6.2.3"
+    "chai": "^5.1.2",
+    "mocha": "^11.0.1",
+    "supertest": "^7.0.0"
   },
-  "directories": {
-    "test": "test"
-  },
-  "keywords": [],
-  "license": "ISC"
+  "contributors": [
+    {
+      "name": "David Cutting",
+      "email": "d.cutting@qub.ac.uk",
+      "role": "Original Contributor"
+    },
+    {
+      "name": "Oscar Wilson",
+      "email": "owilson07@qub.ac.uk",
+      "role": "Student Developer - (Updated Code) - per Section B of mark scheme."
+    }
+  ]
 }
