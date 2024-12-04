@@ -1,77 +1,44 @@
-# Editor Charcount Service
+Editor-AvgWordLength Service
 
-This service provides an API to count characters in a given text. It is part of the QUB Editor Project, which demonstrates cloud computing concepts such as containerization, microservices, and CI/CD pipelines.
+This microservice calculates the average word length of a given text input.
+
+## Features
+- Calculates the average word length, excluding non-alphabetic characters.
+- Supports Unicode characters, emojis, and special characters.
+- Exposes an HTTP endpoint for easy integration.
+
+## Project Structure
+- `cmd/`: Entry point for the application (`server.go`).
+- `internal/avgwordlength/`: Core logic for calculating the average word length.
+- `api/handler.go`: HTTP handler for processing requests.
+- `tests/`: Unit and integration tests.
 
 ## Getting Started
 
-These instructions will help you set up the project on your local machine for development and testing purposes.
-
 ### Prerequisites
+- Docker installed on your system.
+- Go 1.21 installed if running locally without Docker.
 
-Ensure you have the following installed:
-- Docker
-- Node.js
-- Basic knowledge of Git and GitHub Flow
+### Running with Docker
+1. Build the Docker image:
+   ```
+   docker build -t editor-avgwordlength .
+   ```
+2. Run the container:
+   ```
+   docker run -p 4005:4005 editor-avgwordlength
+   ```
 
-### Installing
-
-1. Clone the Repository:
-  ```bash
-  git clone https://github.com/oscarrwilson/cloud-assignment-02.git
-  cd cloud-assignment-02/editor-charcount
+### Testing
+- Run tests locally using Go:
+  ```
+  go test ./... -v
   ```
 
-2. Install Dependencies:
-  ```bash
-  npm ci
-  ```
+### API Endpoint
+- POST `/avgwordlength`
+  - Request Body: `{ "text": "your input text here" }`
+  - Response: `{ "averageWordLength": 4.5 }`
 
-3. Build Docker Image:
-  ```bash
-  docker build -t editor-charcount .
-  ```
-
-4. Run Docker Container:
-  ```bash
-  docker run -d -p 4001:4001 editor-charcount
-  ```
-
-## Running the Tests
-
-### Unit Tests
-
-Run the unit tests using Mocha:
-```bash
-npm test
-```
-
-### Integration Tests
-
-Integration tests are included to ensure the service works as expected with other components. Run them as follows:
-```bash
-npm run test:integration
-```
-
-## Deployment
-
-The application can be deployed on any system with Docker installed. Follow the setup instructions to build and run the Docker containers on your deployment server.
-
-## Built With
-
-- [Docker](https://docs.docker.com/) - Containerization platform
-- [Node.js](https://nodejs.org/) - Backend runtime
-
-## Authors
-
-- **Oscar Wilson** - Queens University Belfast, CSC3065 Cloud Computing Assignment
-
-## License
-
-This project is for educational purposes as part of CSC3065 at QUB and is not intended for production use.
-
-## Acknowledgments
-
-- **QUB** for the assignment outline.
-- **Docker, Node.js** communities for their excellent documentation and resources.
-- **ChatGPT** for use of assignment research and article sourcing.
-- **David Cutting** for original source code.
+## CI Pipeline
+- A GitHub Actions workflow is included to automate tests and builds on every push or pull request to the `main` branch.

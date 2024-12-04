@@ -1,22 +1,38 @@
-# Use a specific Node.js LTS version
-FROM node:18-alpine AS base
+# First Stage: Build and Test
+FROM golang:1.21-alpine AS builder
 
-# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm ci --production
+# Install dependencies and tools
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Copy application source code
-COPY . .
+# Copy application files
+COPY . ./
 
-# Expose the service port for documentation
-EXPOSE 4001
+# Run tests
+RUN go test ./... -v
 
-# Create a non-root user and switch to it
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd
+
+# Second Stage: Production
+FROM alpine:3.18
+
+WORKDIR /usr/src/app
+
+# Copy built binary from builder
+COPY --from=builder /usr/src/app/server /usr/src/app/server
+
+# Set up a non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-# Start the application with dynamic port support
-CMD ["sh", "-c", "node src/server.js --port=${PORT:-4001}"]
+# Expose the service port
+EXPOSE 4005
+
+# Dynamic port support
+ENV PORT=4005
+
+# Run the server
+CMD ["./server"]
