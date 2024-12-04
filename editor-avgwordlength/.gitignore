@@ -1,39 +1,36 @@
-# Node modules directory
-node_modules/       # Installed Node.js dependencies
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
 
-# npm lock file
-package-lock.json   # Dependency lock file for npm
+# Test binary, logs, coverage reports
+*.test
+*.log
+coverage/
 
-# Logs
-logs/               # Log directory
-*.log               # Log files
+# Build directories and Go mod/sum files
+bin/
+pkg/
+vendor/
+go.sum
 
-# Temporary files
-*.tmp               # Temporary files
-*.cache             # Cache files
+# Docker-related files
+docker-compose.override.yml
+.env
 
-# Environment variables
-.env                # Environment configuration file
+# IDE and editor settings
+.idea/
+.vscode/
+*.swp
 
-# Test and coverage files
-coverage/           # Code coverage reports
-*.spec.js           # Test files
-*.test.js           # Test files
+# OS-generated files
+.DS_Store
+Thumbs.db
 
-# Editor settings
-.vscode/            # Visual Studio Code settings
-.idea/              # JetBrains IDE settings
-
-# macOS system files
-.DS_Store           # Finder metadata file for macOS
-
-# Build directories
-dist/               # Distribution files
-build/              # Build directories
-
-# Debugging tools
-*.log.*             # Rotated log files (e.g., `.log.1`, `.log.2`)
-
-# Yarn-specific files (if applicable)
-.yarn-integrity     # Yarn integrity file
-.pnp.*              # Plug'n'Play files from Yarn 2+
+# Debugging and temporary files
+*.tmp
+*.bak
+*.swp
+*.old
