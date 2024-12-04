@@ -1,0 +1,39 @@
+services:
+  frontend:
+    build:
+      context: ./editor-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+
+  charcount:
+    build:
+      context: ./editor-charcount
+      dockerfile: Dockerfile
+    ports:
+      - "4001:80"
+    depends_on:
+      - wordcount
+    healthcheck:
+      test: curl -f http://localhost:4001 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  wordcount:
+    build:
+      context: ./editor-wordcount
+      dockerfile: Dockerfile
+    ports:
+      - "4002:80"
+    healthcheck:
+      test: curl -f http://localhost:4002 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  default:
+    driver: bridge

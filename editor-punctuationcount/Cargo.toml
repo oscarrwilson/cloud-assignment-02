@@ -1,0 +1,17 @@
+[package]
+name = "editor-punctuationcount"
+version = "1.0.0"
+authors = ["Oscar Wilson <owilson07@qub.ac.uk>"]
+edition = "2021"
+description = "Microservice for counting punctuation marks in text."
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+actix-web = "4.9"               # Web framework for building the service
+serde = { version = "1.0", features = ["derive"] }  # Serialization/deserialization
+serde_json = "1.0"              # JSON handling
+tokio = { version = "1.0", features = ["full"] }    # Asynchronous runtime
+
+[dev-dependencies]
+actix-rt = "2.5"  # Required for async runtime testing

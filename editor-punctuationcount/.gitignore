@@ -1,0 +1,26 @@
+# Rust-specific ignores
+target/                         # Compiled binaries and artifacts (ensure it's root-relative)
+/**/*.rs.bk                      # Backup Rust files
+Cargo.lock                       # Dependency lock file (only ignore if you're creating libraries)
+
+# Environment files
+.env                             # Environment configuration (e.g., for dotenv)
+
+# Logs
+/logs/                           # Log directory
+*.log                            # Individual log files
+
+# Temporary and cache files
+*.tmp                            # Temporary files
+*.cache                          # Cache files
+
+# IDE/editor-specific files
+.vscode/                         # Visual Studio Code settings
+.idea/                           # JetBrains IDE settings
+*.iml                            # JetBrains module files
+
+# macOS-specific files
+.DS_Store                        # Finder metadata file
+
+# Docker-related ignores
+docker-compose.override.yml      # Override files for Docker Compose
