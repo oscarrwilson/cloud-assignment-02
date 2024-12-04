@@ -13,7 +13,7 @@ services:
       context: ./editor-charcount
       dockerfile: Dockerfile
     ports:
-      - "4001:80"
+      - "4001:4001"
     depends_on:
       - wordcount
     healthcheck:
@@ -27,12 +27,60 @@ services:
       context: ./editor-wordcount
       dockerfile: Dockerfile
     ports:
-      - "4002:80"
+      - "4002:4002"
     healthcheck:
       test: curl -f http://localhost:4002 || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
+
+  vowelcount:
+    build:
+      context: ./editor-vowelcount
+      dockerfile: Dockerfile
+    ports:
+      - "4003:4003"
+    healthcheck:
+      test: curl -f http://localhost:4003 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  punctuationcount:
+    build:
+      context: ./editor-punctuationcount
+      dockerfile: Dockerfile
+    ports:
+      - "4004:4004"
+    healthcheck:
+      test: curl -f http://localhost:4004 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  avgwordlength:
+    build:
+      context: ./editor-avgwordlength
+      dockerfile: Dockerfile
+    ports:
+      - "4005:4005"
+    healthcheck:
+      test: curl -f http://localhost:4005 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # palindromedetection:
+  #   build:
+  #     context: ./editor-palindromedetection
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4006:80"
+  #   healthcheck:
+  #     test: curl -f http://localhost:4006 || exit 1
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
 
 networks:
   default:

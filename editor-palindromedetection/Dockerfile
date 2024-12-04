@@ -1,22 +1,47 @@
-# Use a specific Node.js LTS version
-FROM node:18-alpine AS base
+# Stage 1: Build and Test
+FROM gcc:12 AS builder
 
-# Set the working directory
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    libmicrohttpd-dev \
+    libcurl4-openssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm ci --production
+# Copy source code and tests
+COPY src/ ./src/
+COPY tests/ ./tests/
 
-# Copy application source code
-COPY . .
+# Compile the integration test without running it
+RUN gcc -o test_integration tests/test_integration.c -lcurl -Isrc
 
-# Expose the service port for documentation
-EXPOSE 4001
+# Compile the application
+RUN gcc -o server src/http_server.c src/palindrome.c src/main.c -lmicrohttpd -Isrc
 
-# Create a non-root user and switch to it
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Stage 2: Production
+FROM debian:bullseye-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libcurl4 \
+    libmicrohttpd12 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy the compiled binary
+COPY --from=builder /usr/src/app/server ./server
+
+# Expose the default port for documentation
+EXPOSE 4006
+
+# Add a non-root user
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
-# Start the application with dynamic port support
-CMD ["sh", "-c", "node src/server.js --port=${PORT:-4001}"]
+# Run the application with dynamic port support
+ENV PORT=4006
+CMD ["./server"]

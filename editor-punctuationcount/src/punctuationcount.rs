@@ -1,5 +1,3 @@
-/// punctuationcount.rs
-///
 /// Provides functionality to count punctuation marks in a given text.
 
 /// Count the number of punctuation marks in a string.
@@ -25,7 +23,7 @@ pub fn count_punctuation(text: &str) -> Result<usize, &'static str> {
   }
 
   // Define punctuation characters
-  let punctuation_chars = r#".,;!?'"-:"#;
+  let punctuation_chars = r#".,;!?'"-:()[]{}<>/\\|@#$%^&*~`"#;
 
   // Count and return the number of punctuation marks
   Ok(text.chars().filter(|c| punctuation_chars.contains(*c)).count())
