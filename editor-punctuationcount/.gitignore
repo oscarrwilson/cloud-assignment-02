@@ -1,5 +1,6 @@
 # Rust-specific ignores
-target/                         # Compiled binaries and artifacts (ensure it's root-relative)
+editor-punctuationcount/target/
+# Compiled binaries and artifacts (ensure it's root-relative)
 /**/*.rs.bk                      # Backup Rust files
 Cargo.lock                       # Dependency lock file (only ignore if you're creating libraries)
 
