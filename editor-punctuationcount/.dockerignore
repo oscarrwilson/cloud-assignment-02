@@ -1,0 +1,23 @@
+# Exclude target directory to avoid rebuilding unnecessary artifacts
+target/
+
+# Exclude version control and editor metadata
+.git/
+.vscode/
+.idea/
+
+# Exclude environment files and logs
+.env
+logs/
+*.log
+
+# Allow necessary test files (uncomment if required for `cargo test`)
+# tests/
+
+# Exclude temporary or backup files
+*.rs.bk
+*.tmp
+
+# Ensure Docker-specific files are not excluded
+!.dockerignore
+!Dockerfile

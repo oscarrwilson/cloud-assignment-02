@@ -1,54 +1,50 @@
-name: Node.js CI
+name: PHP CI
 
 on:
   push:
     branches:
-      - '*'        # Wildcard to match all branches
+      - '*'  # Wildcard to match all branches
   pull_request:
     branches:
-      - '*'        # Wildcard to match all branches
+      - '*'  # Wildcard to match all branches
 
 jobs:
   lint-test:
     name: Lint and Test
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16, 18, 20]  # Test on multiple Node.js versions
-
     steps:
       # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      # Step 2: Set up PHP
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          php-version: '8.2'  # Adjust to the required PHP version
+          extensions: mbstring, dom  # Add any necessary PHP extensions
 
-      # Step 3: Cache Node.js modules
-      - name: Cache Node.js modules
+      # Step 3: Cache Composer dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}
+            ${{ runner.os }}-composer-
 
-      # Step 4: Build Docker Image
-      - name: Build Docker Image
-        run: docker build -t my-app .
+      # Step 4: Install Composer dependencies
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-      # Step 5: Run Tests Inside the Docker Container
-      - name: Run tests inside Docker
-        run: |
-          docker run --rm my-app npm test
+      # Step 5: Run PHP linting
+      - name: Run PHP linting
+        run: php -l src/
 
-      # Step 6: Run linting
-      - name: Run linting
-        run: npm run lint  # Ensure you have eslint set up in your project
+      # Step 6: Run tests
+      - name: Run tests
+        run: composer test  # Executes PHPUnit tests from "composer.json" scripts
 
   build:
     name: Build Docker Image
@@ -70,6 +66,6 @@ jobs:
       # Step 3: Build and push Docker image
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/charcount-app:latest -t ${{ secrets.DOCKER_USERNAME }}/charcount-app:${{ github.sha }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/charcount-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/charcount-app:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/wordcount-app:latest -t ${{ secrets.DOCKER_USERNAME }}/wordcount-app:${{ github.sha }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/wordcount-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/wordcount-app:${{ github.sha }}

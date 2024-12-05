@@ -13,11 +13,7 @@ vendor/
 composer.lock
 
 # Environment files
-.env
-
-# Docker
-*.env
-.dockerignore
+# .env add later
 
 # IDEs and editors
 .vscode/

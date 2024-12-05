@@ -1,0 +1,22 @@
+# Ignore unnecessary files during Docker build
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+
+# Exclude local test and coverage directories
+tests/output/
+coverage/
+
+# Exclude temporary files and build artifacts
+*.tmp
+*.o
+*.out
+*.log
+
+# Exclude editor-specific files
+*.cache
+
+# Ignore any logs
+logs/
