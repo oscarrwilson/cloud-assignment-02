@@ -1,4 +1,4 @@
-# Editor Palindrome Service
+# Editor Charcount Service
 
 This service provides an API to count characters in a given text. It is part of the QUB Editor Project, which demonstrates cloud computing concepts such as containerization, microservices, and CI/CD pipelines.
 
@@ -18,7 +18,7 @@ Ensure you have the following installed:
 1. Clone the Repository:
   ```bash
   git clone https://github.com/oscarrwilson/cloud-assignment-02.git
-  cd cloud-assignment-02/editor-palindromecheck
+  cd cloud-assignment-02/editor-charcount
   ```
 
 2. Install Dependencies:
@@ -28,12 +28,12 @@ Ensure you have the following installed:
 
 3. Build Docker Image:
   ```bash
-  docker build -t editor-palindromecheck .
+  docker build -t editor-charcount .
   ```
 
 4. Run Docker Container:
   ```bash
-  docker run -d -p 4006:4006 editor-palindromecheck
+  docker run -d -p 4001:4001 editor-charcount
   ```
 
 ## Running the Tests

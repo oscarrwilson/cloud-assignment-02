@@ -1,0 +1,22 @@
+# Ignore compiled binaries
+server
+test_integration
+
+# Ignore object files and temporary build files
+*.o
+*.out
+*.log
+*.tmp
+
+# Ignore editor settings
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore dependency and cache files
+*.cache
+*.d
+
+# Ignore test artifacts
+tests/output/
+coverage/

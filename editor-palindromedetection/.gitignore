@@ -1,22 +1,39 @@
-# Ignore compiled binaries
-server
-test_integration
+# Node modules directory
+node_modules/       # Installed Node.js dependencies
 
-# Ignore object files and temporary build files
-*.o
-*.out
-*.log
-*.tmp
+# npm lock file
+package-lock.json   # Dependency lock file for npm
 
-# Ignore editor settings
-.vscode/
-.idea/
-.DS_Store
+# Logs
+logs/               # Log directory
+*.log               # Log files
 
-# Ignore dependency and cache files
-*.cache
-*.d
+# Temporary files
+*.tmp               # Temporary files
+*.cache             # Cache files
 
-# Ignore test artifacts
-tests/output/
-coverage/
+# Environment variables
+.env                # Environment configuration file
+
+# Test and coverage files
+coverage/           # Code coverage reports
+*.spec.js           # Test files
+*.test.js           # Test files
+
+# Editor settings
+.vscode/            # Visual Studio Code settings
+.idea/              # JetBrains IDE settings
+
+# macOS system files
+.DS_Store           # Finder metadata file for macOS
+
+# Build directories
+dist/               # Distribution files
+build/              # Build directories
+
+# Debugging tools
+*.log.*             # Rotated log files (e.g., `.log.1`, `.log.2`)
+
+# Yarn-specific files (if applicable)
+.yarn-integrity     # Yarn integrity file
+.pnp.*              # Plug'n'Play files from Yarn 2+

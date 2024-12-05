@@ -23,16 +23,16 @@ services:
       retries: 3
 
   wordcount:
-    build:
-      context: ./editor-wordcount
-      dockerfile: Dockerfile
-    ports:
-      - "4002:4002"
-    healthcheck:
-      test: curl -f http://localhost:4002 || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      build:
+        context: ./editor-wordcount
+        dockerfile: Dockerfile
+      ports:
+        - "4002:80"
+      healthcheck:
+        test: curl -f http://localhost:4002 || exit 1
+        interval: 10s
+        timeout: 5s
+        retries: 3
 
   vowelcount:
     build:
