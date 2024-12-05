@@ -3,10 +3,10 @@ name: PHP CI
 on:
   push:
     branches:
-      - '*'        # Wildcard to match all branches
+      - main
   pull_request:
     branches:
-      - '*'        # Wildcard to match all branches
+      - main
 
 jobs:
   lint-test:

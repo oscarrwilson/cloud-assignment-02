@@ -1,0 +1,21 @@
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  image: gcc:12
+  script:
+    - gcc -o test src/palindrome.c tests/test_palindrome.c
+    - ./test
+
+build:
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t editor-palindromedetection .
+
+deploy:
+  script:
+    - echo "Deploy steps here"

@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/vendor/autoload.php';  // Autoload dependencies (via Composer)
+require_once __DIR__ . '/vendor/autoload.php';  // Autoload dependencies (if using Composer)
+require_once __DIR__ . '/WordCount.php';  // Assuming this is where wordcount() function is defined
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');  // Allow CORS for all origins
 
 // Error messages
 const MESSAGES = [
-    'missingText' => 'Missing "text" parameter',
+    'missingText' => 'Missing "text" parameter',  // Fixed message
     'tooLong' => 'Input exceeds the maximum allowed length of 10,000 characters',
     'internalError' => 'Internal server error'
 ];
@@ -89,13 +90,4 @@ function handleRequest(): void
 }
 
 // Process the incoming request
-try {
-    handleRequest();
-} catch (Exception $e) {
-    // Catch any unexpected errors and return a 500 response
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Internal server error: ' . $e->getMessage(),
-    ]);
-}
+handleRequest();
