@@ -11,6 +11,10 @@ RUN npm install
 # Copy the application source code
 COPY . .
 
+# Run unit and integration tests
+# This runs `npm test` as defined in your package.json
+# RUN npm test
+
 # Stage 2: Production environment (No dev dependencies)
 FROM node:18-alpine AS production
 
