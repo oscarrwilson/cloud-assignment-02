@@ -1,0 +1,26 @@
+# Ignore Go build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore directories created by Go tooling
+bin/
+pkg/
+vendor/
+
+# Ignore test results
+*.out
+*.test
+
+# Ignore IDE and editor settings
+.idea/
+.vscode/
+*.swp
+
+# Ignore other unnecessary files
+*.log
+*.tmp
+node_modules/
+.DS_Store
+coverage/

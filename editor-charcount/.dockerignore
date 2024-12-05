@@ -1,0 +1,39 @@
+# Exclude Node.js dependencies
+node_modules/       # Installed Node.js packages
+package-lock.json   # Dependency lock file for npm
+jspm_packages/      # JSPM package manager files (if used)
+bower_components/   # Bower package manager files (if used)
+.npm                # Local npm cache directory
+*.tgz               # Archived dependency files
+
+# Ignore logs and temporary files
+logs/               # Log directory (if generated)
+*.log               # Log files
+tmp/                # Temporary files and directories
+temp/
+*.tmp
+*.temp
+
+# Ignore environment and IDE-specific files
+.env                # Environment configuration file
+.eslintcache        # ESLint cache file
+.vscode/            # Visual Studio Code settings
+.DS_Store           # macOS-specific system file
+.idea/              # JetBrains IDE settings (e.g., WebStorm)
+
+# Ignore Git-related files and version control
+.git/               # Git version control directory
+.gitignore          # This ignore file itself
+.yarn-integrity     # Yarn integrity file (if using Yarn)
+
+# Ignore test, coverage, and build directories
+test/               # Unit tests and other test files
+tests/              # Integration test directories
+*.spec.js           # Test files (JavaScript specs)
+*.test.js           # Test files (JavaScript tests)
+coverage/           # Code coverage reports
+dist/               # Distribution artifacts
+build/              # Build directories
+
+# Ignore documentation (optional)
+docs/               # Documentation files (if unnecessary in the container)

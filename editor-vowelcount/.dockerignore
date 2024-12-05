@@ -1,0 +1,38 @@
+# Ignore Python dependencies
+__pycache__/        # Python bytecode cache directory
+*.pyc               # Compiled Python files
+*.pyo               # Optimized Python files
+*.pyd               # Compiled extension files (Windows)
+
+# Ignore virtual environments
+venv/               # Python virtual environment
+.env                # Environment configuration file
+
+# Ignore logs and temporary files
+logs/               # Log directory (if generated)
+*.log               # Log files
+tmp/                # Temporary files and directories
+temp/
+*.tmp
+*.temp
+
+# Ignore IDE-specific files and settings
+.vscode/            # Visual Studio Code settings
+.idea/              # JetBrains IDE settings (e.g., PyCharm)
+.DS_Store           # macOS-specific system file
+
+# Ignore version control files
+.git/               # Git version control directory
+.gitignore          # This ignore file itself
+
+# Ignore test, coverage, and build directories
+test/               # Unit tests and other test files
+tests/              # Integration test directories
+*.spec.py           # Test files (Python specs)
+*.test.py           # Test files (Python tests)
+coverage/           # Code coverage reports
+dist/               # Distribution artifacts
+build/              # Build directories
+
+# Ignore documentation (optional)
+docs/               # Documentation files (if unnecessary in the container)
