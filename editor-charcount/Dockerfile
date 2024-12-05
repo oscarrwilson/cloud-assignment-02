@@ -11,6 +11,9 @@ RUN npm install
 # Copy the application source code
 COPY . .
 
+# Run tests
+RUN npm test
+
 # Stage 2: Production environment (No dev dependencies)
 FROM node:18-alpine AS production
 

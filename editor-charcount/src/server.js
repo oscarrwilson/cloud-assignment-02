@@ -81,8 +81,9 @@ app.get('/', async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, HOST, () => {
   console.log(`Server running at http://${HOST}:${PORT}`);
 });
 
-export default app; // Export app for testing
+// Export both app and server for testing
+export { app, server };
