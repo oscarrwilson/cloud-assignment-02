@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "test": "mocha",
+    "test": "mocha --exit",
     "lint": "eslint ."
   },
   "dependencies": {

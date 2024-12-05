@@ -1,8 +1,13 @@
 import request from 'supertest';
 import { expect } from 'chai';
-import app from '../src/server.js';
+import { app, server } from '../src/server.js'; // Import both app and server
 
 describe('Server Integration Tests', () => {
+  // Close the server after all tests to avoid hanging
+  after(() => {
+    server.close();
+  });
+
   it('should return a character count for valid input', async () => {
     const response = await request(app)
       .get('/')
@@ -107,7 +112,7 @@ describe('Server Integration Tests', () => {
     for (let i = 0; i < requestCount; i++) {
       const response = await request(app)
         .get('/')
-        .query({ text: text });
+        .query({ text });
 
       responses.push(response);
     }
