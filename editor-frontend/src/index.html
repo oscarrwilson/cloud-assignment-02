@@ -1,128 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>QUBeditotron3000</title>
-
-<script type="text/javascript">
-
-let wordcountURL = "http://wordcount.editor.qpc.qubcloud.uk";
-let charcountURL = "http://charcount.editor.qpc.qubcloud.uk";
-
-
-
-function Wordcount()
-{
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.response);
-            document.getElementById('output').value = j.answer;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUBeditotron3000</title>
+    <script type="text/javascript" src="app.js" defer></script>
+    <style>
+        /* General Body Styles */
+        body {
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f9f9f9, #e3e3e3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-    };
 
-    let url = wordcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
-    xhttp.open("GET",url);
-    xhttp.send();
-}
-
-function Charcount()
-{
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.response);
-            document.getElementById('output').value = j.answer;
+        /* Central Editor Container */
+        #editor {
+            width: 90%;
+            max-width: 700px;
+            background-color: #ffffff;
+            padding: 2em;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            text-align: center;
         }
-    };
 
-    let url = charcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
-    xhttp.open("GET",url);
-    xhttp.send();
-}
+        /* Logo Styles */
+        #logo {
+            font-family: 'Georgia', serif;
+            font-size: 2em;
+            color: #333333;
+            margin-bottom: 1em;
+        }
 
+        /* Input Fields */
+        textarea, input[type="text"] {
+            width: 90%;
+            max-width: 600px;
+            padding: 0.8em;
+            margin: 0.8em auto;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: block;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-</script>
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
 
-<style type="text/css">
-body  {
-    font-size: 150%;
-    font-family: monospace;
-}
+        input[readonly] {
+            background-color: #f7f7f7;
+            cursor: not-allowed;
+        }
 
-#logo
-{
-    font-family: Calibri, sans-serif;
-    font-weight: lighter;
-    color: #505050;
-    margin: 0.5em;
-}
+        /* Buttons */
+        .operation {
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.75em 1.5em;
+            margin: 0.5em;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-#editor
-{
-    text-align: center;
-    margin-top: 1em;
-}
+        .operation:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
 
-#output {
-    font-size: 100%;
-    padding: 0.2em;
-    margin: 0.2em;
-    font-family: monospace;
-    letter-spacing: 0.1em;
-}
+        .operation:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
 
-#content {
-    font-size: 100%;
-    padding: 0.2em;
-    margin: 0.2em;
-    font-family: monospace;
-    letter-spacing: 0.1em;
-}
-
-.operation {
-    border: solid #d0d0d0 1px;
-    background-color: #f0f0f0;
-    padding: 1.5em;
-    margin: 1em;
-    width: 14em;
-}
-</style>
-
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #editor {
+                padding: 1em;
+            }
+            textarea, input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<div id="editor">
-    <div id="logo">
-        QUBeditotron3000
+    <div id="editor">
+        <div id="logo">QUBeditotron3000</div>
+        <textarea id="content" placeholder="Enter text here...">It was the best of cloud, it was the worst of cloud...</textarea>
+        <input type="text" id="output" readonly placeholder="Result will appear here..." />
+        <div>
+            <button class="operation" onclick="performOperation('wordcount');">Word Count</button>
+            <button class="operation" onclick="performOperation('charcount');">Character Count</button>
+        </div>
+        <div>
+            <button class="operation" onclick="performOperation('vowelcount');">Vowel Count</button>
+            <button class="operation" onclick="performOperation('punctuationcount');">Punctuation Count</button>
+        </div>
+        <div>
+            <button class="operation" onclick="performOperation('avgwordlength');">Average Word Length</button>
+            <button class="operation" onclick="performOperation('palindromedetection');">Palindrome Detection</button>
+        </div>
     </div>
-    <div>
-        <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
-    </div>
-    <div>
-        <input type="text" id="output" readonly="1" value="" />
-    </div>
-    <div>
-        <button class="operation" onclick="Wordcount();">Word Count</button>
-        <button class="operation" onclick="Charcount();">Character Count</button>
-    </div>
-    <div>
-        <button class="operation" onclick="Wordcount();">Test</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    <div>
-        <button class="operation" onclick="">??</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    <div>
-        <button class="operation" onclick="">??</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    <div>
-        <button class="operation" onclick="">??</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    
-</div>
 </body>
-
-
 </html>

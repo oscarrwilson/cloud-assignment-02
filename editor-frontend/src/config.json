@@ -1,5 +1,8 @@
 {
-  "wordcountURL": "http://wordcount.editor.qpc.qubcloud.uk",
-  "charcountURL": "http://charcount.editor.qpc.qubcloud.uk"
+  "wordcountURL": "http://localhost:4002",
+  "charcountURL": "http://localhost:4001",
+  "vowelcountURL": "http://localhost:4003",
+  "punctuationcountURL": "http://localhost:4003",
+  "avgwordlengthURL": "http://localhost:4005",
+  "palindromedetectionURL": "http://localhost:4006"
 }
-
