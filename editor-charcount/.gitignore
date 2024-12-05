@@ -1,9 +1,6 @@
 # Node modules directory
 node_modules/       # Installed Node.js dependencies
 
-# npm lock file
-package-lock.json   # Dependency lock file for npm
-
 # Logs
 logs/               # Log directory
 *.log               # Log files
