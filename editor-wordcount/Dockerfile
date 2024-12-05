@@ -39,7 +39,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && echo 'DocumentRoot /var/www/html' >> /etc/apache2/sites-available/000-default.conf  # Force correct DocumentRoot
 
 # Expose the default HTTP port
-EXPOSE 80
+EXPOSE 4002
 
 # Switch to a non-root user for better security
 USER www-data

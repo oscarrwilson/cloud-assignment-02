@@ -1,7 +1,7 @@
 import express from 'express';
 import charcount from './charcount.js'; // Ensure correct path and file extension
 
-const PORT = process.env.PORT || 80; // Configurable via env variable
+const PORT = process.env.PORT || 4001; // Configurable via env variable
 const HOST = '0.0.0.0';
 const app = express();
 
@@ -11,6 +11,17 @@ const messages = {
   tooLong: 'Input exceeds the maximum allowed length of 10,000 characters',
   internalError: 'Internal server error',
 };
+
+/**
+ * Health check endpoint
+ */
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    message: 'Application is running smoothly!',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 /**
  * GET endpoint to count characters in a string.
