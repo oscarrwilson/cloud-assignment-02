@@ -1,42 +1,33 @@
 #include <stdio.h>
-#include <assert.h>
 #include <string.h>
-#include "palindrome.h"
+#include <assert.h>
+#include "../src/palindrome.h"
 
 void test_is_palindrome() {
-    // Test cases for palindromes
-    assert(is_palindrome("racecar") == true);
     assert(is_palindrome("madam") == true);
-    assert(is_palindrome("a") == true);
-    assert(is_palindrome("") == true);
-
-    // Test cases for non-palindromes
+    assert(is_palindrome("racecar") == true);
     assert(is_palindrome("hello") == false);
-    assert(is_palindrome("world") == false);
-
-    printf("test_is_palindrome passed!\n");
+    assert(is_palindrome("A man a plan a canal Panama") == false); // Requires cleaning
+    printf("is_palindrome tests passed.\n");
 }
 
 void test_clean_string() {
-    char output[256];
+    char output[100];
+    clean_string("Hello, World!", output);
+    assert(strcmp(output, "helloworld") == 0);
 
-    // Test cleaning and converting to lowercase
-    clean_string("A man, a plan, a canal: Panama!", output);
+    clean_string("A man, a plan, a canal, Panama!", output);
     assert(strcmp(output, "amanaplanacanalpanama") == 0);
 
-    clean_string("No 'x' in Nixon", output);
-    assert(strcmp(output, "noxinnixon") == 0);
+    clean_string("12345 6789", output);
+    assert(strcmp(output, "123456789") == 0);
 
-    clean_string("", output);
-    assert(strcmp(output, "") == 0);
-
-    printf("test_clean_string passed!\n");
+    printf("clean_string tests passed.\n");
 }
 
 int main() {
     test_is_palindrome();
     test_clean_string();
-
-    printf("All tests passed!\n");
+    printf("All tests passed.\n");
     return 0;
 }

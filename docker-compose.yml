@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   frontend:
     build:
@@ -14,8 +16,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
-    depends_on:
-      - wordcount
     healthcheck:
       test: curl -f http://localhost:4001 || exit 1
       interval: 10s
@@ -70,17 +70,17 @@ services:
       timeout: 5s
       retries: 3
 
-  # palindromedetection:
-  #   build:
-  #     context: ./editor-palindromedetection
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4006:80"
-  #   healthcheck:
-  #     test: curl -f http://localhost:4006 || exit 1
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
+  palindromedetection:
+    build:
+      context: ./editor-palindromedetection
+      dockerfile: Dockerfile
+    ports:
+      - "4006:4006"
+    healthcheck:
+      test: curl -f http://localhost:4006 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 networks:
   default:
