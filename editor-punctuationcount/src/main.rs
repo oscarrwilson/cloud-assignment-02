@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_cors::Cors;
 use serde::Deserialize;
 use serde_json::json;
 use std::env;
@@ -60,8 +61,18 @@ async fn main() -> std::io::Result<()> {
             4004
         });
 
-    HttpServer::new(|| App::new().route("/", web::get().to(count_punctuation)))
-        .bind(("0.0.0.0", port))?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            // Add CORS middleware
+            .wrap(
+                Cors::default()
+                    .allow_any_origin() // Allow requests from any origin
+                    .allow_any_method() // Allow all HTTP methods
+                    .allow_any_header() // Allow all request headers
+            )
+            .route("/", web::get().to(count_punctuation))
+    })
+    .bind(("0.0.0.0", port))?
+    .run()
+    .await
 }
