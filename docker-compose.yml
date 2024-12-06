@@ -6,42 +6,54 @@ services:
       context: ./editor-frontend
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV}
+      - WORDCOUNT_URL=${WORDCOUNT_URL}
+      - CHARCOUNT_URL=${CHARCOUNT_URL}
+      - VOWELCOUNT_URL=${VOWELCOUNT_URL}
+      - PUNCTUATIONCOUNT_URL=${PUNCTUATIONCOUNT_URL}
+      - AVGWORDLENGTH_URL=${AVGWORDLENGTH_URL}
+      - PALINDROMEDETECTION_URL=${PALINDROMEDETECTION_URL}
 
   charcount:
     build:
       context: ./editor-charcount
       dockerfile: Dockerfile
     ports:
-      - "4001:4001"
+      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
+    environment:
+      - PORT=${CHARCOUNT_PORT}
     healthcheck:
-      test: curl -f http://localhost:4001 || exit 1
+      test: curl -f http://charcount:${CHARCOUNT_PORT}/health || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
 
   wordcount:
-      build:
-        context: ./editor-wordcount
-        dockerfile: Dockerfile
-      ports:
-        - "4002:80"
-      healthcheck:
-        test: curl -f http://localhost:4002 || exit 1
-        interval: 10s
-        timeout: 5s
-        retries: 3
+    build:
+      context: ./editor-wordcount
+      dockerfile: Dockerfile
+    ports:
+      - "${WORDCOUNT_PORT}:80"
+    environment:
+      - PORT=${WORDCOUNT_PORT}
+    healthcheck:
+      test: curl -f http://wordcount:${WORDCOUNT_PORT}/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   vowelcount:
     build:
       context: ./editor-vowelcount
       dockerfile: Dockerfile
     ports:
-      - "4003:4003"
+      - "${VOWELCOUNT_PORT}:${VOWELCOUNT_PORT}"
+    environment:
+      - PORT=${VOWELCOUNT_PORT}
     healthcheck:
-      test: curl -f http://localhost:4003 || exit 1
+      test: curl -f http://vowelcount:${VOWELCOUNT_PORT}/health || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
@@ -51,9 +63,11 @@ services:
       context: ./editor-punctuationcount
       dockerfile: Dockerfile
     ports:
-      - "4004:4004"
+      - "${PUNCTUATIONCOUNT_PORT}:${PUNCTUATIONCOUNT_PORT}"
+    environment:
+      - PORT=${PUNCTUATIONCOUNT_PORT}
     healthcheck:
-      test: curl -f http://localhost:4004 || exit 1
+      test: curl -f http://punctuationcount:${PUNCTUATIONCOUNT_PORT}/health || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
@@ -63,9 +77,11 @@ services:
       context: ./editor-avgwordlength
       dockerfile: Dockerfile
     ports:
-      - "4005:4005"
+      - "${AVGWORDLENGTH_PORT}:${AVGWORDLENGTH_PORT}"
+    environment:
+      - PORT=${AVGWORDLENGTH_PORT}
     healthcheck:
-      test: curl -f http://localhost:4005 || exit 1
+      test: curl -f http://avgwordlength:${AVGWORDLENGTH_PORT}/health || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
@@ -75,9 +91,30 @@ services:
       context: ./editor-palindromedetection
       dockerfile: Dockerfile
     ports:
-      - "4006:4006"
+      - "${PALINDROMEDETECTION_PORT}:${PALINDROMEDETECTION_PORT}"
+    environment:
+      - PORT=${PALINDROMEDETECTION_PORT}
     healthcheck:
-      test: curl -f http://localhost:4006 || exit 1
+      test: curl -f http://palindromedetection:${PALINDROMEDETECTION_PORT}/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  reverse-proxy:
+    build:
+      context: ./editor-reverse-proxy
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - charcount
+      - wordcount
+      - vowelcount
+      - punctuationcount
+      - avgwordlength
+      - palindromedetection
+    healthcheck:
+      test: curl -f http://localhost:8080/health || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
