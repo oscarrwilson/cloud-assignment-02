@@ -66,8 +66,8 @@ async function performOperation(type) {
 
             case "punctuationcount":
                 outputField.value = !data.error
-                    ? `Punctuation Count: ${data.answer}.`
-                    : "Error: Unable to fetch punctuation count.";
+                    ? `Punctuation Count : ${data.answer}.`
+                    : "Error: Unable to fetch punctuation count!";
                 break;
 
             case "avgwordlength":
