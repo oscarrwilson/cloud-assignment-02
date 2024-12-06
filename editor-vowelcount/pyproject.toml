@@ -1,0 +1,25 @@
+[project]
+name = "editor_vowelcount"
+version = "1.0.0"
+description = "Vowel Counting Web Service"
+authors = [
+    { name = "Oscar Wilson", email = "owilson07@qub.ac.uk" }
+]
+requires-python = ">=3.9"
+keywords = ["text analysis", "vowel count", "web service"]
+dependencies = [
+    "Flask>=2.3.3"
+]
+
+[project.optional-dependencies]
+testing = [
+    "pytest>=7.4.0",
+    "pytest-flask>=1.2.0"
+]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"

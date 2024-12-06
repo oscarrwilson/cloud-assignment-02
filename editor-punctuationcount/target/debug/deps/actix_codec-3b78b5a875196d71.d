@@ -1,0 +1,10 @@
+/Users/oscarwilson/Projects/Education/Cloud/cloud-assignment-02/editor-punctuationcount/target/debug/deps/libactix_codec-3b78b5a875196d71.rmeta: /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lib.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/bcodec.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/framed.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lines.rs
+
+/Users/oscarwilson/Projects/Education/Cloud/cloud-assignment-02/editor-punctuationcount/target/debug/deps/libactix_codec-3b78b5a875196d71.rlib: /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lib.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/bcodec.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/framed.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lines.rs
+
+/Users/oscarwilson/Projects/Education/Cloud/cloud-assignment-02/editor-punctuationcount/target/debug/deps/actix_codec-3b78b5a875196d71.d: /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lib.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/bcodec.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/framed.rs /Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lines.rs
+
+/Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lib.rs:
+/Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/bcodec.rs:
+/Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/framed.rs:
+/Users/oscarwilson/.cargo/registry/src/index.crates.io-6f17d22bba15001f/actix-codec-0.5.2/src/lines.rs:
