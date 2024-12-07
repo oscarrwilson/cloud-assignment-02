@@ -1,111 +1,16 @@
-version: '3'
+version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ./editor-frontend
-      dockerfile: Dockerfile
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - WORDCOUNT_URL=${WORDCOUNT_URL}
-      - CHARCOUNT_URL=${CHARCOUNT_URL}
-      - VOWELCOUNT_URL=${VOWELCOUNT_URL}
-      - PUNCTUATIONCOUNT_URL=${PUNCTUATIONCOUNT_URL}
-      - AVGWORDLENGTH_URL=${AVGWORDLENGTH_URL}
-      - PALINDROMEDETECTION_URL=${PALINDROMEDETECTION_URL}
-
-  charcount:
-    build:
-      context: ./editor-charcount
-      dockerfile: Dockerfile
-    ports:
-      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
-    environment:
-      - PORT=${CHARCOUNT_PORT}
-    healthcheck:
-      test: curl -f http://charcount:${CHARCOUNT_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  wordcount:
-    build:
-      context: ./editor-wordcount
-      dockerfile: Dockerfile
-    ports:
-      - "${WORDCOUNT_PORT}:80"
-    environment:
-      - PORT=${WORDCOUNT_PORT}
-    healthcheck:
-      test: curl -f http://wordcount:${WORDCOUNT_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  vowelcount:
-    build:
-      context: ./editor-vowelcount
-      dockerfile: Dockerfile
-    ports:
-      - "${VOWELCOUNT_PORT}:${VOWELCOUNT_PORT}"
-    environment:
-      - PORT=${VOWELCOUNT_PORT}
-    healthcheck:
-      test: curl -f http://vowelcount:${VOWELCOUNT_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  punctuationcount:
-    build:
-      context: ./editor-punctuationcount
-      dockerfile: Dockerfile
-    ports:
-      - "${PUNCTUATIONCOUNT_PORT}:${PUNCTUATIONCOUNT_PORT}"
-    environment:
-      - PORT=${PUNCTUATIONCOUNT_PORT}
-    healthcheck:
-      test: curl -f http://punctuationcount:${PUNCTUATIONCOUNT_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  avgwordlength:
-    build:
-      context: ./editor-avgwordlength
-      dockerfile: Dockerfile
-    ports:
-      - "${AVGWORDLENGTH_PORT}:${AVGWORDLENGTH_PORT}"
-    environment:
-      - PORT=${AVGWORDLENGTH_PORT}
-    healthcheck:
-      test: curl -f http://avgwordlength:${AVGWORDLENGTH_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  palindromedetection:
-    build:
-      context: ./editor-palindromedetection
-      dockerfile: Dockerfile
-    ports:
-      - "${PALINDROMEDETECTION_PORT}:${PALINDROMEDETECTION_PORT}"
-    environment:
-      - PORT=${PALINDROMEDETECTION_PORT}
-    healthcheck:
-      test: curl -f http://palindromedetection:${PALINDROMEDETECTION_PORT}/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
   reverse-proxy:
     build:
       context: ./editor-reverse-proxy
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./editor-frontend/src:/app/frontend/src
     depends_on:
       - charcount
       - wordcount
@@ -119,6 +24,81 @@ services:
       timeout: 5s
       retries: 3
 
-networks:
-  default:
-    driver: bridge
+  frontend:
+    build:
+      context: ./editor-frontend
+      dockerfile: Dockerfile
+    command: ["sleep", "infinity"]  # Keeps the container running
+    volumes:
+      - ./editor-frontend:/app
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV}
+
+  charcount:
+    build:
+      context: ./editor-charcount
+      dockerfile: Dockerfile
+    ports:
+      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"  # Maps the port defined in .env  
+    expose:
+      - "${CHARCOUNT_PORT}"
+    environment:
+      PORT: ${CHARCOUNT_PORT}
+
+  wordcount:
+    build:
+      context: ./editor-wordcount
+      dockerfile: Dockerfile
+    ports:
+      - "${WORDCOUNT_PORT}:80"  # Maps the port defined in .env
+    expose:
+      - "80:${WORDCOUNT_PORT}"
+    environment:
+      PORT: ${WORDCOUNT_PORT}
+
+  vowelcount:
+    build:
+      context: ./editor-vowelcount
+      dockerfile: Dockerfile
+    ports:
+      - "${VOWELCOUNT_PORT}:${VOWELCOUNT_PORT}"  # Maps the port defined in .env
+    expose:
+      - "${VOWELCOUNT_PORT}"
+    environment:
+      PORT: ${VOWELCOUNT_PORT}
+
+  punctuationcount:
+    build:
+      context: ./editor-punctuationcount
+      dockerfile: Dockerfile
+    ports:
+      - "${PUNCTUATIONCOUNT_PORT}:${PUNCTUATIONCOUNT_PORT}"  # Maps the port defined in .env
+    expose:
+      - "${PUNCTUATIONCOUNT_PORT}"
+    environment:
+      PORT: ${PUNCTUATIONCOUNT_PORT}
+
+  avgwordlength:
+    build:
+      context: ./editor-avgwordlength
+      dockerfile: Dockerfile
+    ports:
+      - "${AVGWORDLENGTH_PORT}:${AVGWORDLENGTH_PORT}"  # Maps the port defined in .env  
+    expose:
+      - "${AVGWORDLENGTH_PORT}"
+    environment:
+      PORT: ${AVGWORDLENGTH_PORT}
+
+  palindromedetection:
+    build:
+      context: ./editor-palindromedetection
+      dockerfile: Dockerfile
+    ports:
+      - "${PALINDROMEDETECTION_PORT}:${PALINDROMEDETECTION_PORT}"  # Maps the port defined in .env
+    expose:
+      - "${PALINDROMEDETECTION_PORT}"
+    environment:
+      PORT: ${PALINDROMEDETECTION_PORT}

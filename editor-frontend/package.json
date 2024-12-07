@@ -1,16 +1,11 @@
 {
   "name": "editor-frontend",
   "version": "1.0.0",
-  "description": "Frontend container for editor service, runs on port 80.",
-  "main": "src/app.js",
-  "directories": {
-    "test": "tests"
-  },
+  "description": "Frontend for the editor, compiled into static assets",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "mkdir -p build && cp src/index.html build && cp src/app.js build && cp src/config.json build",
+    "test": "echo \"No tests specified\" && exit 0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {},
+  "devDependencies": {}
 }

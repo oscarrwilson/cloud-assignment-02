@@ -1,79 +1,56 @@
-from flask import Flask, request, jsonify, make_response
-import requests
-import json
-from flask_cors import CORS
+from flask import Flask, jsonify, request, send_from_directory
+import requests  # Ensure this is imported for backend requests
+import os
+from dotenv import load_dotenv
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+# Load .env file
+load_dotenv()
 
-# Load initial configuration from file
-CONFIG_FILE = "config.json"
-try:
-    with open(CONFIG_FILE, "r") as f:
-        endpoints = json.load(f)
-except FileNotFoundError:
-    endpoints = {}
+app = Flask(__name__, static_folder="/app/frontend/src")
 
+# Backend services and their URLs
+services = {
+    "charcount": os.getenv("CHARCOUNT_URL"),
+    "wordcount": os.getenv("WORDCOUNT_URL"),
+    "vowelcount": os.getenv("VOWELCOUNT_URL"),
+    "punctuationcount": os.getenv("PUNCTUATIONCOUNT_URL"),
+    "avgwordlength": os.getenv("AVGWORDLENGTH_URL"),
+    "palindromedetection": os.getenv("PALINDROMEDETECTION_URL"),
+}
 
-# Health Check Endpoint
-@app.route("/health", methods=["GET"])
-def health_check():
-    return jsonify({"status": "healthy"}), 200
-
-
-# Dynamic Proxy Endpoint
+# Proxy route for backend services
 @app.route("/proxy/<service>", methods=["GET", "POST", "PUT", "DELETE"])
 def proxy(service):
-    if service not in endpoints:
+    if service not in services:
         return jsonify({"error": f"Service '{service}' not found"}), 404
 
-    # Get target URL from config
-    target_url = endpoints[service]
-
-    # Forward the request to the backend service
+    target_url = services[service]  # Get the service URL from the mapping
     try:
+        # Forward the request to the corresponding backend service
         response = requests.request(
             method=request.method,
             url=target_url,
-            headers=request.headers,
+            headers={key: value for key, value in request.headers if key != "Host"},
+            data=request.get_data(),
             params=request.args,
-            data=request.data,
         )
-        # Pass the backend response back to the client
-        return make_response((response.content, response.status_code, response.headers.items()))
+        # Return the backend's response to the client
+        return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"Failed to reach service '{service}': {str(e)}"}), 500
+        return jsonify({"error": f"Request to service '{service}' failed: {str(e)}"}), 500
 
+# Health check endpoint
+@app.route("/health")
+def health():
+    return jsonify({"status": "healthy"}), 200
 
-# Service Discovery Endpoint
-@app.route("/discovery", methods=["GET"])
-def service_discovery():
-    return jsonify(list(endpoints.keys()))
+# Serve static frontend files
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_frontend(path):
+    if path and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, "index.html")
 
-
-# Dynamic Configuration Endpoint
-@app.route("/config", methods=["POST"])
-def update_config():
-    global endpoints
-    new_config = request.json
-    endpoints.update(new_config)
-
-    # Save updated configuration to file
-    with open(CONFIG_FILE, "w") as f:
-        json.dump(endpoints, f)
-
-    return jsonify({"message": "Configuration updated successfully", "config": endpoints})
-
-
-# Add CORS Headers for All Responses
-@app.after_request
-def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
-    return response
-
-
-# Main
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

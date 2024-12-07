@@ -1,8 +1,8 @@
 {
-  "wordcountURL": "http://localhost:8080/proxy/wordcount",
-  "charcountURL": "http://localhost:8080/proxy/charcount",
-  "vowelcountURL": "http://localhost:8080/proxy/vowelcount",
-  "punctuationcountURL": "http://localhost:8080/proxy/punctuationcount",
-  "avgwordlengthURL": "http://localhost:8080/proxy/avgwordlength",
-  "palindromedetectionURL": "http://localhost:8080/proxy/palindromedetection"
+  "charcountURL": "/proxy/charcount",
+  "wordcountURL": "/proxy/wordcount",
+  "vowelcountURL": "/proxy/vowelcount",
+  "punctuationcountURL": "/proxy/punctuationcount",
+  "avgwordlengthURL": "/proxy/avgwordlength",
+  "palindromedetectionURL": "/proxy/palindromedetection"
 }
