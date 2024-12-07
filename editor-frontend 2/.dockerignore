@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Git-related files
+.git/
+.gitignore
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Test-related files
+*.test.js
+tests/
+coverage/
+
+# Configurations and unused files
+.env

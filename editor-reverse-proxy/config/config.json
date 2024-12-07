@@ -1,0 +1,11 @@
+{
+    "static_folder": "/app/frontend/src",
+    "services": {
+        "charcount": "http://charcount:4001",
+        "wordcount": "http://wordcount:80",
+        "vowelcount": "http://vowelcount:4003",
+        "punctuationcount": "http://punctuationcount:4004",
+        "avgwordlength": "http://avgwordlength:4005",
+        "palindromedetection": "http://palindromedetection:4006"
+    }
+}

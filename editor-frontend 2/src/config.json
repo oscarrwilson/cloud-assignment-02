@@ -1,0 +1,8 @@
+{
+  "charcountURL": "/proxy/charcount",
+  "wordcountURL": "/proxy/wordcount",
+  "vowelcountURL": "/proxy/vowelcount",
+  "punctuationcountURL": "/proxy/punctuationcount",
+  "avgwordlengthURL": "/proxy/avgwordlength",
+  "palindromedetectionURL": "/proxy/palindromedetection"
+}
