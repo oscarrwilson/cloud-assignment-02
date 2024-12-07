@@ -26,7 +26,7 @@ services = config.get("services", {})
 @app.route("/services", methods=["GET"])
 def list_services():
     """List all available services."""
-    return jsonify({"services": list(services.keys())}), 200
+    return jsonify({"services": services}), 200
 
 # Dynamic addition of services
 @app.route("/services", methods=["POST"])
@@ -46,6 +46,27 @@ def add_service():
         return jsonify({"error": f"Failed to save service: {str(e)}"}), 500
     
     return jsonify({"message": f"Service '{data['name']}' added successfully"}), 201
+
+# Dynamic deletion of services
+@app.route("/services", methods=["DELETE"])
+def delete_service():
+    """Remove a service dynamically."""
+    data = request.get_json()
+    if not data or "name" not in data:
+        return jsonify({"error": "Service 'name' is required"}), 400
+    if data["name"] not in services:
+        return jsonify({"error": f"Service '{data['name']}' not found"}), 404
+
+    del services[data["name"]]
+    # Persist to config.json
+    try:
+        with open(CONFIG_PATH, "w") as config_file:
+            config["services"] = services
+            json.dump(config, config_file, indent=4)
+    except Exception as e:
+        return jsonify({"error": f"Failed to delete service: {str(e)}"}), 500
+
+    return jsonify({"message": f"Service '{data['name']}' removed successfully"}), 200
 
 # Periodically update services from environment variables
 def update_services_from_env():

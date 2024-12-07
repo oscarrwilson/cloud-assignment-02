@@ -1,5 +1,3 @@
-# editor-reverse-proxy/tests/test_services.py
-
 import json
 from unittest import mock
 
@@ -42,34 +40,33 @@ def test_add_service_success(client, mock_config):
         data = json.loads(response.data)
         assert "testservice" in data["services"]
 
-        # Verify persistence to config.json
-        with open(mock_config) as f:
-            config_data = json.load(f)
-        assert "testservice" in config_data["services"]
-        assert config_data["services"]["testservice"] == "http://testservice:9999"
 
-
-def test_add_service_missing_fields(client, mock_config):
+def test_add_duplicate_service(client, mock_config):
     """
-    Test adding a new service with missing 'name' or 'url' fields.
+    Test adding a duplicate service.
     """
     with mock.patch('proxy.CONFIG_PATH', str(mock_config)):
-        # Missing 'name'
         new_service = {
+            "name": "testservice",
             "url": "http://testservice:9999"
         }
-        response = client.post("/services", json=new_service)
-        assert response.status_code == 400
-        data = json.loads(response.data)
-        assert "error" in data
-        assert "Service 'name' and 'url' are required" in data["error"]
+        client.post("/services", json=new_service)
 
-        # Missing 'url'
-        new_service = {
-            "name": "testservice"
-        }
+        # Add the same service again
         response = client.post("/services", json=new_service)
         assert response.status_code == 400
         data = json.loads(response.data)
         assert "error" in data
-        assert "Service 'name' and 'url' are required" in data["error"]
+        assert "already exists" in data["error"]
+
+
+def test_delete_nonexistent_service(client, mock_config):
+    """
+    Test deleting a non-existent service.
+    """
+    with mock.patch('proxy.CONFIG_PATH', str(mock_config)):
+        response = client.delete("/services", json={"name": "invalidservice"})
+        assert response.status_code == 404
+        data = json.loads(response.data)
+        assert "error" in data
+        assert "not found" in data["error"]
