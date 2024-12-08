@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   reverse-proxy:
     build:
@@ -15,7 +17,6 @@ services:
       - vowelcount
       - punctuationcount
       - avgwordlength
-      - palindromedetection
     healthcheck:
       test: curl -f http://localhost:8080/health || exit 1
       interval: 10s
@@ -28,14 +29,14 @@ services:
       dockerfile: Dockerfile
     environment:
       NODE_ENV: ${NODE_ENV}
-    command: ["npm", "run", "build"]  # Build the static files during startup
+    command: ["npm", "run", "build"]
 
   charcount:
     build:
       context: ./editor-charcount
       dockerfile: Dockerfile
     ports:
-      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"  # Maps the port defined in .env  
+      - "${CHARCOUNT_PORT}:${CHARCOUNT_PORT}"
     expose:
       - "${CHARCOUNT_PORT}"
     environment:
@@ -46,7 +47,7 @@ services:
       context: ./editor-wordcount
       dockerfile: Dockerfile
     ports:
-      - "${WORDCOUNT_PORT}:80"  # Maps the port defined in .env
+      - "${WORDCOUNT_PORT}:80"
     expose:
       - "80:${WORDCOUNT_PORT}"
     environment:
@@ -57,7 +58,7 @@ services:
       context: ./editor-vowelcount
       dockerfile: Dockerfile
     ports:
-      - "${VOWELCOUNT_PORT}:${VOWELCOUNT_PORT}"  # Maps the port defined in .env
+      - "${VOWELCOUNT_PORT}:${VOWELCOUNT_PORT}"
     expose:
       - "${VOWELCOUNT_PORT}"
     environment:
@@ -68,7 +69,7 @@ services:
       context: ./editor-punctuationcount
       dockerfile: Dockerfile
     ports:
-      - "${PUNCTUATIONCOUNT_PORT}:${PUNCTUATIONCOUNT_PORT}"  # Maps the port defined in .env
+      - "${PUNCTUATIONCOUNT_PORT}:${PUNCTUATIONCOUNT_PORT}"
     expose:
       - "${PUNCTUATIONCOUNT_PORT}"
     environment:
@@ -79,7 +80,7 @@ services:
       context: ./editor-avgwordlength
       dockerfile: Dockerfile
     ports:
-      - "${AVGWORDLENGTH_PORT}:${AVGWORDLENGTH_PORT}"  # Maps the port defined in .env  
+      - "${AVGWORDLENGTH_PORT}:${AVGWORDLENGTH_PORT}"
     expose:
       - "${AVGWORDLENGTH_PORT}"
     environment:
@@ -90,8 +91,23 @@ services:
       context: ./editor-palindromedetection
       dockerfile: Dockerfile
     ports:
-      - "${PALINDROMEDETECTION_PORT}:${PALINDROMEDETECTION_PORT}"  # Maps the port defined in .env
+      - "${PALINDROMEDETECTION_PORT}:${PALINDROMEDETECTION_PORT}"
     expose:
       - "${PALINDROMEDETECTION_PORT}"
     environment:
       PORT: ${PALINDROMEDETECTION_PORT}
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: textdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./editor-database:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
