@@ -1,19 +1,27 @@
 # editor-reverse-proxy/tests/test_service_discovery.py
-
-import json
+import sys
 import os
-from unittest import mock
+import json
 import pytest
+from unittest import mock
+
+# Add src directory to Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
+import proxy  # Import the proxy module after adjusting PYTHONPATH
+
 
 def test_update_services_from_env(mock_config, tmp_path):
     """
     Test the update_services_from_env function updates services based on environment variables.
     """
+    # Patch the CONFIG_PATH and mock environment variables
     with mock.patch('proxy.CONFIG_PATH', str(mock_config)), \
          mock.patch.dict(os.environ, {
              "NEW_SERVICE_URL": "http://newservice:1234",
              "CHARCOUNT_URL": "http://charcount-updated:4001"
          }):
+        
         # Initial services
         with open(mock_config, "w") as f:
             json.dump({
@@ -45,7 +53,8 @@ def test_service_discovery_thread(mock_config):
     with mock.patch('proxy.CONFIG_PATH', str(mock_config)), \
          mock.patch('proxy.update_services_from_env') as mock_update, \
          mock.patch('proxy.threading.Thread') as mock_thread:
-        # Start the app (without actually running the server)
+        
+        # Simulate starting the app without running the server
         with pytest.raises(SystemExit):
             with mock.patch('proxy.app.run', side_effect=SystemExit):
                 proxy.app.run(host="0.0.0.0", port=8080, debug=False)

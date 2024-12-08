@@ -1,7 +1,9 @@
 # editor-reverse-proxy/tests/test_static_files.py
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 import json
-import os
 from unittest import mock
 
 def test_serve_frontend_root(client, mock_config, tmp_path):
