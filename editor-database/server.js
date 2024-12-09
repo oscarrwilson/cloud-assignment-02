@@ -26,12 +26,10 @@ app.post('/save', async (req, res) => {
   try {
     const { content } = req.body;
 
-    // Validate input
     if (!content || typeof content !== 'string') {
       return res.status(400).json({ error: 'Invalid or missing text content' });
     }
 
-    // Check length limits
     if (content.length > 5000) {
       return res.status(400).json({ error: 'Text content exceeds maximum length of 5000 characters' });
     }
@@ -54,7 +52,6 @@ app.get('/retrieve/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Validate ID format (check for numeric ID)
     const numericId = parseInt(id, 10);
     if (isNaN(numericId) || numericId <= 0) {
       return res.status(400).json({ error: 'Invalid ID format' });
@@ -75,12 +72,34 @@ app.get('/retrieve/:id', async (req, res) => {
   }
 });
 
+// Health Check Endpoint
+app.get('/health', async (req, res) => {
+  try {
+    // Check database connectivity
+    const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+
+    res.status(200).json({
+      status: 'OK',
+      uptime: process.uptime(), // Server uptime in seconds
+      dbStatus, // Database connection status
+      timestamp: new Date().toISOString(), // Current timestamp
+    });
+  } catch (error) {
+    console.error('Health check failed:', error);
+    res.status(500).json({ status: 'ERROR', error: 'Health check failed' });
+  }
+});
+
 // 404 handler for undefined routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Start the server only if not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
+
+module.exports = app; // Export the app instance for testing

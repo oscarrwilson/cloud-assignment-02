@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   reverse-proxy:
     build:
@@ -17,6 +15,7 @@ services:
       - vowelcount
       - punctuationcount
       - avgwordlength
+      - text-service
     healthcheck:
       test: curl -f http://localhost:8080/health || exit 1
       interval: 10s
@@ -97,17 +96,29 @@ services:
     environment:
       PORT: ${PALINDROMEDETECTION_PORT}
 
-  database:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: textdb
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - ./editor-database:/docker-entrypoint-initdb.d
-      - postgres-data:/var/lib/postgresql/data
+      - mongo-data:/data/db
+
+  text-service:
+    build:
+      context: ./editor-database
+      dockerfile: Dockerfile
+    ports:
+      - "4007:4007"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/editor-database
+    depends_on:
+      - mongodb
+    healthcheck:
+      test: curl -f http://localhost:4007/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
-  postgres-data:
+  mongo-data:
