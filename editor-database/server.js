@@ -1,31 +1,44 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const Text = require('./models/Text');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const port = 4007;
 
-// Middleware for parsing JSON
+app.set('trust proxy', true);
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect('mongodb://mongodb:27017/editor-database', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  headers: true,
+  handler: (req, res) => {
+    res.status(429).json({
+      error: "Too many requests from this IP, please try again later."
+    });
+  }
 });
+app.use(limiter);
 
-const db = mongoose.connection;
+// Connect to MongoDB only if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect('mongodb://mongodb:27017/editor-database', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
-db.on('error', console.error.bind(console, 'Connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'Connection error:'));
+  db.once('open', () => {
+    console.log('Connected to MongoDB');
+  });
+}
 
-// Endpoint to save text
 app.post('/save', async (req, res) => {
   try {
     const { content } = req.body;
-
     if (!content || typeof content !== 'string') {
       return res.status(400).json({ error: 'Invalid or missing text content' });
     }
@@ -47,11 +60,9 @@ app.post('/save', async (req, res) => {
   }
 });
 
-// Endpoint to retrieve text by ID
 app.get('/retrieve/:id', async (req, res) => {
   try {
     const { id } = req.params;
-
     const numericId = parseInt(id, 10);
     if (isNaN(numericId) || numericId <= 0) {
       return res.status(400).json({ error: 'Invalid ID format' });
@@ -72,17 +83,15 @@ app.get('/retrieve/:id', async (req, res) => {
   }
 });
 
-// Health Check Endpoint
 app.get('/health', async (req, res) => {
   try {
-    // Check database connectivity
     const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
 
     res.status(200).json({
       status: 'OK',
-      uptime: process.uptime(), // Server uptime in seconds
-      dbStatus, // Database connection status
-      timestamp: new Date().toISOString(), // Current timestamp
+      uptime: process.uptime(),
+      dbStatus,
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Health check failed:', error);
@@ -90,16 +99,14 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// 404 handler for undefined routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Start the server only if not in test mode
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
   });
 }
 
-module.exports = app; // Export the app instance for testing
+module.exports = app;
