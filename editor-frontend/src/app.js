@@ -99,5 +99,53 @@ async function performOperation(type) {
   }
 }
 
+async function saveText() {
+    const textInput = document.getElementById('content').value.trim();
+    const outputField = document.getElementById('output');
+
+    if (!textInput) {
+        outputField.value = "Please enter some text to save.";
+        return;
+    }
+
+    try {
+        const response = await fetch(config.saveURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: textInput }),
+        });
+
+        if (!response.ok) throw new Error(`Save failed: ${response.statusText}`);
+
+        const data = await response.json();
+        outputField.value = `Saved! Your ID is: ${data.id}`;
+    } catch (error) {
+        outputField.value = `Error saving text: ${error.message}`;
+    }
+}
+
+async function retrieveText() {
+    const id = document.getElementById('identifier').value.trim();
+    const outputField = document.getElementById('output');
+
+    if (!id) {
+        outputField.value = "Please enter an ID to retrieve text.";
+        return;
+    }
+
+    try {
+        const response = await fetch(`${config.retrieveURL}/${id}`);
+
+        if (!response.ok) throw new Error(`Retrieve failed: ${response.statusText}`);
+
+        const data = await response.json();
+        outputField.value = `Retrieved Text: ${data.content}`;
+    } catch (error) {
+        outputField.value = `Error retrieving text: ${error.message}`;
+    }
+}
+
 // Load configuration on page load
 window.onload = loadConfig;

@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   reverse-proxy:
     build:
@@ -109,7 +111,9 @@ services:
       context: ./editor-database
       dockerfile: Dockerfile
     ports:
-      - "4007:4007"
+      - "${TEXT_SERVICE_PORT}:${TEXT_SERVICE_PORT}"
+    expose:
+      - "${TEXT_SERVICE_PORT}"
     environment:
       - MONGO_URL=mongodb://mongodb:27017/editor-database
     depends_on:
@@ -119,6 +123,5 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
 volumes:
   mongo-data:

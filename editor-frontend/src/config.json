@@ -4,5 +4,7 @@
   "vowelcountURL": "/proxy/vowelcount",
   "punctuationcountURL": "/proxy/punctuationcount",
   "avgwordlengthURL": "/proxy/avgwordlength",
-  "palindromedetectionURL": "/proxy/palindromedetection"
+  "palindromedetectionURL": "/proxy/palindromedetection",
+  "saveURL": "/proxy/text-service/save",
+  "retrieveURL": "/proxy/text-service/retrieve"
 }

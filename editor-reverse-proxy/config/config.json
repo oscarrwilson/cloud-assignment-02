@@ -6,6 +6,7 @@
         "vowelcount": "http://vowelcount:4003",
         "punctuationcount": "http://punctuationcount:4004",
         "avgwordlength": "http://avgwordlength:4005",
-        "palindromedetection": "http://palindromedetection:4006"
+        "palindromedetection": "http://palindromedetection:4006",
+        "text-service": "http://text-service:4007"
     }
 }

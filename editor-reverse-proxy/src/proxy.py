@@ -22,21 +22,24 @@ app = Flask(__name__, static_folder=STATIC_FOLDER)
 # Backend services and their URLs
 services = config.get("services", {})
 
-# Dynamic service discovery endpoint
+def normalize_service_name(name):
+    """Ensure consistent naming for services."""
+    return name.replace("_", "-").lower()
+
 @app.route("/services", methods=["GET"])
 def list_services():
     """List all available services."""
     return jsonify({"services": services}), 200
 
-# Dynamic addition of services
 @app.route("/services", methods=["POST"])
 def add_service():
     """Add a new service dynamically."""
     data = request.get_json()
     if not data or "name" not in data or "url" not in data:
         return jsonify({"error": "Service 'name' and 'url' are required"}), 400
-    
-    services[data["name"]] = data["url"]
+
+    normalized_name = normalize_service_name(data["name"])
+    services[normalized_name] = data["url"]
     # Persist to config.json
     try:
         with open(CONFIG_PATH, "w") as config_file:
@@ -44,20 +47,21 @@ def add_service():
             json.dump(config, config_file, indent=4)
     except Exception as e:
         return jsonify({"error": f"Failed to save service: {str(e)}"}), 500
-    
-    return jsonify({"message": f"Service '{data['name']}' added successfully"}), 201
 
-# Dynamic deletion of services
+    return jsonify({"message": f"Service '{normalized_name}' added successfully"}), 201
+
 @app.route("/services", methods=["DELETE"])
 def delete_service():
     """Remove a service dynamically."""
     data = request.get_json()
     if not data or "name" not in data:
         return jsonify({"error": "Service 'name' is required"}), 400
-    if data["name"] not in services:
-        return jsonify({"error": f"Service '{data['name']}' not found"}), 404
 
-    del services[data["name"]]
+    normalized_name = normalize_service_name(data["name"])
+    if normalized_name not in services:
+        return jsonify({"error": f"Service '{normalized_name}' not found"}), 404
+
+    del services[normalized_name]
     # Persist to config.json
     try:
         with open(CONFIG_PATH, "w") as config_file:
@@ -66,20 +70,18 @@ def delete_service():
     except Exception as e:
         return jsonify({"error": f"Failed to delete service: {str(e)}"}), 500
 
-    return jsonify({"message": f"Service '{data['name']}' removed successfully"}), 200
+    return jsonify({"message": f"Service '{normalized_name}' removed successfully"}), 200
 
-# Periodically update services from environment variables
 def update_services_from_env():
     """Periodically scan environment variables for service URLs and update the registry."""
     while True:
         updated = False
         for key, value in os.environ.items():
             if key.endswith("_URL"):
-                service_name = key[:-4].lower()  # Strip '_URL' suffix and lowercase
+                service_name = normalize_service_name(key[:-4])
                 if service_name not in services or services[service_name] != value:
                     services[service_name] = value
                     updated = True
-        # Persist updates to config.json if there are changes
         if updated:
             try:
                 with open(CONFIG_PATH, "w") as config_file:
@@ -89,35 +91,51 @@ def update_services_from_env():
                 print(f"Error saving services to config.json: {e}")
         time.sleep(30)  # Check every 30 seconds
 
-# Proxy route for backend services
 @app.route("/proxy/<service>", methods=["GET", "POST", "PUT", "DELETE"])
-def proxy(service):
-    """Forward requests to the appropriate backend service."""
-    if service not in services:
-        return jsonify({"error": f"Service '{service}' not found"}), 404
+def proxy_root(service):
+    """Forward requests to the appropriate backend service without subpath."""
+    normalized_service = normalize_service_name(service)
+    if normalized_service not in services:
+        return jsonify({"error": f"Service '{normalized_service}' not found"}), 404
 
-    target_url = services[service]
+    target_url = services[normalized_service]
     try:
-        # Forward the request to the corresponding backend service
         response = requests.request(
             method=request.method,
             url=target_url,
-            headers={key: value for key, value in request.headers if key != "Host"},
+            headers={key: value for key, value in request.headers if key.lower() != "host"},
             data=request.get_data(),
             params=request.args,
         )
-        # Return the backend's response to the client
         return response.text, response.status_code, response.headers.items()
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"Request to service '{service}' failed: {str(e)}"}), 500
+        return jsonify({"error": f"Request to service '{normalized_service}' failed: {str(e)}"}), 500
 
-# Health check endpoint
+@app.route("/proxy/<service>/<path:subpath>", methods=["GET", "POST", "PUT", "DELETE"])
+def proxy_with_subpath(service, subpath):
+    """Forward requests with subpaths to the appropriate backend service."""
+    normalized_service = normalize_service_name(service)
+    if normalized_service not in services:
+        return jsonify({"error": f"Service '{normalized_service}' not found"}), 404
+
+    target_url = f"{services[normalized_service]}/{subpath}"
+    try:
+        response = requests.request(
+            method=request.method,
+            url=target_url,
+            headers={key: value for key, value in request.headers if key.lower() != "host"},
+            data=request.get_data(),
+            params=request.args,
+        )
+        return response.text, response.status_code, response.headers.items()
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"Request to service '{normalized_service}' failed: {str(e)}"}), 500
+
 @app.route("/health")
 def health():
     """Health check endpoint for the proxy."""
     return jsonify({"status": "healthy"}), 200
 
-# Serve static frontend files
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def serve_frontend(path):
@@ -126,7 +144,6 @@ def serve_frontend(path):
         return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, "index.html")
 
-# Start the service discovery thread and Flask app
 if __name__ == "__main__":
     threading.Thread(target=update_services_from_env, daemon=True).start()
     app.run(host="0.0.0.0", port=8080)
