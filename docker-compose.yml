@@ -123,5 +123,28 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+  monitoring-service:
+    build:
+      context: ./monitoring-service
+      dockerfile: Dockerfile
+    ports:
+      - "4008:4008"
+    env_file:
+      - .env
+    depends_on:
+      - charcount
+      - wordcount
+      - vowelcount
+      - punctuationcount
+      - avgwordlength
+      - palindromedetection
+      - text-service
+    healthcheck:
+      test: curl -f http://localhost:4008/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 volumes:
   mongo-data:
